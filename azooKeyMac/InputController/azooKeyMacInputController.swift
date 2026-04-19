@@ -167,11 +167,14 @@ class azooKeyMacInputController: IMKInputController, NSMenuItemValidation { // s
         // Chromium 系アプリで JS コンパイル中に activate された場合、
         // client.attributes(forCharacterIndex:) の同期呼び出しが deadlock を
         // 引き起こすため呼び出さない（Chromium issue 503787240）。
-        // 空候補配列を渡すため BaseCandidateViewController.resizeWindowToFitContent は
-        // numberOfVisibleRows == 0 で早期 return し、cursorLocation は使われない。
+        // refreshCandidateWindow / refreshPredictionWindow は composing/selecting 状態で
+        // client.attributes(...) を呼ぶ経路があるため、activate 中は使わずウィンドウを
+        // 明示的に閉じる。
         self.candidatesViewController.updateCandidatePresentations([], selectionIndex: nil, cursorLocation: .zero)
-        self.refreshCandidateWindow()
-        self.refreshPredictionWindow()
+        self.candidatesWindow.setIsVisible(false)
+        self.candidatesWindow.orderOut(nil)
+        self.candidatesViewController.hide()
+        self.hidePredictionWindow()
     }
 
     @MainActor

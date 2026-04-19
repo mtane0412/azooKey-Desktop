@@ -12,6 +12,8 @@
 ///   機能に影響がない。
 
 import XCTest
+import Core
+import KanaKanjiConverterModuleWithDefaultDictionary
 @testable import azooKeyMac
 
 final class ChromiumDeadlockRegressionTests: XCTestCase {
